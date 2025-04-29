@@ -34,7 +34,12 @@ const userSchema = new mongoose.Schema({
     resetOtpExpiryTime:{
         type:Number,
         default:0
-    }
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'seller', 'user'],
+        default: 'user',
+      }
 
 },{timestamps:true})
 

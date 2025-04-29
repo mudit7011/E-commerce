@@ -1,25 +1,21 @@
-import User from "../models/user.models.js "
+import User from "../models/user.models.js";
 
-export const getUserData = async (req,res)=>{
+export const getUserData = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
 
-    try {
-
-        const {userId} = req.body;
-
-    const user = await User.findById(userId)
-
-    if(!user){
-        return res.json({success:true,message:"User is not found"})
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    return res.json({success:true,userData:{
+    return res.json({
+      success: true,
+      userData: {
         name: user.name,
-        isVerified:user.isVerified
-    }})
-        
-    } catch (error) {
-        return res.json({success:false,message:error.message})
-    }
-
-
-}
+        isVerified: user.isVerified,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
